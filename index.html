@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Filtrar Links de Grupos de Whatsapp e Telegram</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+  <style>
+    body {
+      background-color: #121212;
+      color: #b3b3b3;
+    }
+
+    .btn-primary {
+      background-color: #1DB954;
+    }
+
+    .link {
+      margin-bottom: 5px;
+    }
+
+    .credit {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      text-align: center;
+      padding: 20px 0;
+      background-color: #121212;
+      color: #b3b3b3;
+      border-top: 1px solid #282828;
+    }
+  </style>
+</head>
+<body>
+  <div class="container py-5">
+    <h1 class="text-center mb-4">Filtrar Links de Grupos de Whatsapp e Telegram</h1>
+
+    <div class="row">
+      <div class="col-md-8 offset-md-2">
+        <textarea id="input-text" class="form-control" rows="10" placeholder="Cole seu texto aqui..."></textarea>
+        <button onclick="extractLinks()" class="btn btn-primary btn-block mt-4">Extrair links</button>
+      </div>
+    </div>
+
+    <div id="results" class="mt-5">
+      <!-- Aqui serão exibidos os links de grupos -->
+    </div>
+  </div>
+
+  <div class="credit">Criado por Aleksandro Alves da Rocha Junior</div>
+
+  <script>
+    function extractLinks() {
+      var text = document.getElementById('input-text').value;
+      var whatsappGroupLinks = text.match(/chat\.whatsapp\.com\/(?:invite\/)?[\w-]{22,32}/gi);
+      var telegramGroupLinks = text.match(/t\.me\/joinchat\/[\w-]+/gi);
+
+      var resultsDiv = document.getElementById('results');
+      resultsDiv.innerHTML = '';
+
+      if (whatsappGroupLinks) {
+        resultsDiv.innerHTML += '<h2 class="text-center">Links de Grupos de Whatsapp:</h2>';
+        whatsappGroupLinks.forEach(link => {
+          resultsDiv.innerHTML += '<div class="link"><a href="https://' + link + '" class="btn btn-success btn-block">https://' + link + '</a></div>';
+        });
+      }
+
+      if (telegramGroupLinks) {
+        resultsDiv.innerHTML += '<h2 class="text-center mt-5">Links de Grupos de Telegram:</h2>';
+        telegramGroupLinks.forEach(link => {
+          resultsDiv.innerHTML += '<div class="link"><a href="https://' + link + '" class="btn btn-info btn-block">https://' + link + '</a></div>';
+        });
+      }
+    }
+  </script>
+</body>
+</html>
