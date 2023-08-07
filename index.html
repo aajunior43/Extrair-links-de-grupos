@@ -12,23 +12,9 @@
       color: #b3b3b3;
     }
 
-    .btn-primary {
-      background-color: #1DB954;
-    }
-
-    .link {
-      margin-bottom: 5px;
-    }
-
-    .credit {
-      position: fixed;
-      bottom: 0;
+    .result-textarea {
       width: 100%;
-      text-align: center;
-      padding: 20px 0;
-      background-color: #121212;
-      color: #b3b3b3;
-      border-top: 1px solid #282828;
+      height: 400px; /* Altura fixa da caixa de texto de resultados */
     }
   </style>
 </head>
@@ -44,34 +30,36 @@
     </div>
 
     <div id="results" class="mt-5">
-      <!-- Aqui serão exibidos os links de grupos -->
+      <h2 class="text-center">Links Extraídos:</h2>
+      <textarea id="result-text" class="form-control result-textarea" readonly></textarea>
+      <button onclick="copyToClipboard()" class="btn btn-secondary btn-block mt-3">Copiar para a Área de Transferência</button>
     </div>
   </div>
-
-  <div class="credit">Criado por Aleksandro Alves da Rocha Junior</div>
 
   <script>
     function extractLinks() {
       var text = document.getElementById('input-text').value;
       var whatsappGroupLinks = text.match(/chat\.whatsapp\.com\/(?:invite\/)?[\w-]{22,32}/gi);
-      var telegramGroupLinks = text.match(/t\.me\/joinchat\/[\w-]+/gi);
+      var telegramGroupLinks = text.match(/t\.me\/(?:joinchat\/|invite\/)?[\w-]+/gi);
 
-      var resultsDiv = document.getElementById('results');
-      resultsDiv.innerHTML = '';
+      var resultTextarea = document.getElementById('result-text');
+      resultTextarea.value = '';
 
       if (whatsappGroupLinks) {
-        resultsDiv.innerHTML += '<h2 class="text-center">Links de Grupos de Whatsapp:</h2>';
-        whatsappGroupLinks.forEach(link => {
-          resultsDiv.innerHTML += '<div class="link"><a href="https://' + link + '" class="btn btn-success btn-block">https://' + link + '</a></div>';
-        });
+        resultTextarea.value += 'Links de Grupos de Whatsapp:\n';
+        resultTextarea.value += whatsappGroupLinks.join('\n') + '\n\n';
       }
 
       if (telegramGroupLinks) {
-        resultsDiv.innerHTML += '<h2 class="text-center mt-5">Links de Grupos de Telegram:</h2>';
-        telegramGroupLinks.forEach(link => {
-          resultsDiv.innerHTML += '<div class="link"><a href="https://' + link + '" class="btn btn-info btn-block">https://' + link + '</a></div>';
-        });
+        resultTextarea.value += 'Links de Grupos de Telegram:\n';
+        resultTextarea.value += telegramGroupLinks.join('\n') + '\n';
       }
+    }
+
+    function copyToClipboard() {
+      var resultTextarea = document.getElementById('result-text');
+      resultTextarea.select();
+      document.execCommand('copy');
     }
   </script>
 </body>
